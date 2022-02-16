@@ -5,9 +5,18 @@ import { surehData, quranPages } from "../../assets/quranMetadata";
 const quranPagesIndex = quranPages.map((page) => {
   return +surehData[page[0]][0] + page[1] - 1;
 });
-console.log(quranPagesIndex);
+///////////////////////// going to each sureh function
 
-function gotoSura(i: number) {}
+function gotoSura(i: number) {
+  console.log(surehData[i][0]);
+  console.log(quranPagesIndex[1]);
+  for (let j = 0; j < quranPagesIndex.length; j++) {
+    if (quranPagesIndex[j] > +surehData[i][0]) {
+      router.push(`/Quran/${j}`);
+      break;
+    }
+  }
+}
 </script>
 
 <template>

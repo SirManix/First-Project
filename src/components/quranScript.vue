@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
 import { quranPages, surehData } from "../assets/quranMetadata";
-import { quranArray } from "../assets/search";
+import { quranArray, tarjomeArray } from "../assets/search";
 /////////////////// get pages from quranpages array
 let pageNumber: number = 1;
 const selectPage = function (pageNumber: number) {
@@ -34,12 +34,27 @@ const converToPages = function (pageNumber: number) {
 for (let i = 0; i < quranPages.length - 1; i++) {
   converToPages(i);
 }
-console.log(quranByPages);
+///////////////////////////////////////////////////////////////////////////////////tarjome
+
+//////slice the main array
+const getEachPageTarjome = function (startIndex: number, endIndex: number) {
+  return tarjomeArray.slice(startIndex, endIndex);
+};
+/////////////// get each page ayeh
+const tarjomeByPages: string[][] = [[]];
+const tarjomeConverToPages = function (pageNumber: number) {
+  const page = selectPage(pageNumber);
+  const indexes = getIndexOfPage(page.start, page.end);
+  const ayeh = getEachPageTarjome(indexes.startIndex, indexes.endIndex);
+  tarjomeByPages.push(ayeh);
+};
+for (let i = 0; i < quranPages.length - 1; i++) {
+  tarjomeConverToPages(i);
+}
+
 /////////////////////////////////////////////// params
 const route = useRoute();
 const router = useRouter();
-console.log(route);
-console.log(router);
 if (+route.params.id < quranPages.length && +route.params.id > 0) {
   router.push(`/Quran/${+route.params.id}`);
 } else {
@@ -76,6 +91,7 @@ const searchPage = function (searchedPage: number) {
   <div>page : {{ $route.params.id }}</div>
   <ul>
     <li v-for="page in quranByPages[+$route.params.id]">{{ page }}</li>
+    <li v-for="tarjome in tarjomeByPages[+$route.params.id]">{{ tarjome }}</li>
   </ul>
   <div>
     <button v-if="+$route.params.id > 1" @click="priviousPage">صفحه قبل</button>
